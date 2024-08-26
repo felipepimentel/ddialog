@@ -1,4 +1,9 @@
-.PHONY: up down build logs shell-frontend shell-backend test-backend check-docker pull up-dev down-dev build-dev restart-dev
+.PHONY: up down build logs shell-frontend shell-backend test-backend check-docker pull up-dev down-dev build-dev restart-dev clean install-dependencies setup-env init init-dev down-build-up down-build-up-dev rollback notify help lint-frontend lint-backend format-backend check-types migrate make-migration build-frontend build-backend deploy-prod
+
+# Variables
+COMPOSE_FILE=docker-compose.yml
+COMPOSE_DEV_FILE=docker-compose.dev.yml
+NETWORK_NAME=my_project_network
 
 check-docker:
 	@if ! docker info > /dev/null 2>&1; then \
@@ -9,23 +14,30 @@ check-docker:
 pull: check-docker
 	docker compose pull
 
-up: check-docker
-	docker compose up -d
+create-network:
+	@docker network create $(NETWORK_NAME) || echo "Network already exists."
+
+up: check-docker create-network
+	docker compose -f $(COMPOSE_FILE) up -d
 
 down: check-docker
-	docker compose down
+	docker compose -f $(COMPOSE_FILE) down
 
 build: check-docker pull
-	docker compose build
+	docker compose -f $(COMPOSE_FILE) build
+	$(MAKE) test-backend
 
-up-dev: check-docker
-	docker compose -f docker-compose.dev.yml up -d
+up-dev: check-docker create-network
+	docker compose -f $(COMPOSE_DEV_FILE) up -d
 
 down-dev: check-docker
-	docker compose -f docker-compose.dev.yml down
+	docker compose -f $(COMPOSE_DEV_FILE) down
 
 build-dev: check-docker pull
-	docker compose -f docker-compose.dev.yml build
+	cd backend && poetry lock --no-update
+	docker compose -f $(COMPOSE_DEV_FILE) build
+	docker compose -f $(COMPOSE_DEV_FILE) run --rm backend poetry install
+	$(MAKE) test-backend-dev
 
 logs: check-docker
 	docker compose logs -f
@@ -39,9 +51,16 @@ shell-backend: check-docker
 test-backend: check-docker
 	docker compose exec backend poetry run pytest
 
+test-coverage: check-docker
+	docker compose exec backend poetry run pytest --cov=src
+
+test-backend-dev:
+	docker compose -f docker-compose.dev.yml run --rm backend poetry run pytest
+
 install-dependencies:
-	cd frontend && pnpm install
-	cd backend && poetry install || (echo "Poetry install failed. Please check your pyproject.toml file." && exit 1)
+	@(cd frontend && pnpm install) &
+	@(cd backend && poetry install) &
+	wait
 
 setup-env:
 	@if [ ! -f backend/.env ]; then \
@@ -60,3 +79,82 @@ down-build-up: down build up
 down-build-up-dev: down-dev build-dev up-dev
 
 restart-dev: down-dev build-dev up-dev
+
+clean:
+	docker compose down -v --rmi all --remove-orphans
+	docker volume prune -f
+	docker system prune -f
+
+rollback:
+	@echo "Rolling back to previous stable version..."
+	docker compose down
+	git checkout stable
+	$(MAKE) build up
+
+notify:
+	@echo "Build completed successfully!" | notify-send "Build Notification"
+
+# Linting and Formatting
+lint-frontend:
+	cd frontend && pnpm run lint
+
+lint-backend: check-docker
+	docker compose exec backend poetry run flake8
+
+format-backend: check-docker
+	docker compose exec backend poetry run black .
+
+check-types: check-docker
+	docker compose exec backend poetry run mypy src/
+
+# Migrations
+migrate: check-docker
+	docker compose exec backend poetry run alembic upgrade head
+
+make-migration: check-docker
+	docker compose exec backend poetry run alembic revision --autogenerate -m "Migration message"
+
+# Build artifacts
+build-frontend:
+	cd frontend && pnpm run build
+
+build-backend: check-docker
+	docker compose exec backend poetry build
+
+# Deployment
+deploy-prod:
+	@echo "Deploying to production..."
+	# Add your deployment commands here
+	# e.g., ssh to server, git pull, docker-compose up -d
+
+# Shortcuts
+u: up
+d: down
+b: build
+r: restart-dev
+
+help:
+	@echo "Available commands:"
+	@echo "  make up              - Start services in detached mode"
+	@echo "  make down            - Stop services"
+	@echo "  make build           - Build services"
+	@echo "  make logs            - Follow logs"
+	@echo "  make shell-frontend  - Access shell in frontend container"
+	@echo "  make shell-backend   - Access shell in backend container"
+	@echo "  make test-backend    - Run backend tests"
+	@echo "  make test-coverage   - Run backend tests with coverage"
+	@echo "  make clean           - Clean up Docker artifacts"
+	@echo "  make init            - Initialize the project environment"
+	@echo "  make init-dev        - Initialize the development environment"
+	@echo "  make down-build-up   - Stop, build, and start services"
+	@echo "  make rollback        - Rollback to the previous stable version"
+	@echo "  make notify          - Send a notification upon completion"
+	@echo "  make lint-frontend   - Lint the frontend code"
+	@echo "  make lint-backend    - Lint the backend code"
+	@echo "  make format-backend  - Format the backend code"
+	@echo "  make check-types     - Check Python types in the backend"
+	@echo "  make migrate         - Apply database migrations"
+	@echo "  make make-migration  - Create a new database migration"
+	@echo "  make build-frontend  - Build the frontend artifacts"
+	@echo "  make build-backend   - Build the backend artifacts"
+	@echo "  make deploy-prod     - Deploy to production"

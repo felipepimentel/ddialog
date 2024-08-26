@@ -158,11 +158,12 @@ __pycache__/
 
 # FastAPI
 /.venv
-/.vscode
 /.pytest_cache
 
 # Poetry
 /.venv
-/.vscode
 /.pytest_cache
 .poetry/
+
+
+.pytest_cache
