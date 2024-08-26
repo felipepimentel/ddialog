@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:18 as build
 
 # Install pnpm
 RUN npm install -g pnpm
@@ -14,6 +14,6 @@ RUN pnpm run build
 
 # Use a lightweight nginx image to serve the built files
 FROM nginx:alpine
-COPY --from=0 /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

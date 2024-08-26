@@ -43,7 +43,7 @@ The project consists of two main components:
    This command will set up the environment, install dependencies, build Docker images, and start the services.
 
 3. Access the application:
-   - Frontend: `http://localhost:5173`
+   - Frontend: `http://localhost:3000`
    - Backend API: `http://localhost:8000`
    - API documentation: `http://localhost:8000/docs`
 
@@ -51,10 +51,15 @@ The project consists of two main components:
 
 ### Common Commands
 
-- Start the application: `make up`
-- Stop the application: `make down`
+- Start the application (production): `make up`
+- Start the application (development): `make up-dev`
+- Stop the application (production): `make down`
+- Stop the application (development): `make down-dev`
 - View logs: `make logs`
-- Rebuild Docker images: `make build`
+- Rebuild Docker images (production): `make build`
+- Rebuild Docker images (development): `make build-dev`
+- Stop, rebuild, and start (production): `make down-build-up`
+- Stop, rebuild, and start (development): `make down-build-up-dev`
 - Access frontend shell: `make shell-frontend`
 - Access backend shell: `make shell-backend`
 - Run backend tests: `make test-backend`
