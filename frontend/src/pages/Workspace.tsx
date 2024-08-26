@@ -1,57 +1,94 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import api from '../services/api';
 
 interface Message {
-  id: string;
+  id: number;
   content: string;
   sender: 'user' | 'ai';
+}
+
+interface Document {
+  id: number;
+  name: string;
 }
 
 const Workspace: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
-  const [documents, setDocuments] = useState<string[]>([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [workspaceName, setWorkspaceName] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // TODO: Fetch workspace data and initial messages
-    setMessages([
-      { id: '1', content: 'Welcome to your workspace!', sender: 'ai' },
-    ]);
+    fetchWorkspaceData();
+    fetchDocuments();
   }, [id]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = () => {
-    if (input.trim()) {
-      const newMessage: Message = { id: Date.now().toString(), content: input, sender: 'user' };
-      setMessages([...messages, newMessage]);
-      setInput('');
-      // TODO: Send message to backend for processing
-      // Simulate AI response
-      setTimeout(() => {
-        const aiMessage: Message = { id: (Date.now() + 1).toString(), content: 'I received your message.', sender: 'ai' };
-        setMessages(prev => [...prev, aiMessage]);
-      }, 1000);
+  const fetchWorkspaceData = async () => {
+    try {
+      const response = await api.get(`/workspaces/${id}`);
+      setWorkspaceName(response.data.name);
+    } catch (error) {
+      console.error('Error fetching workspace data:', error);
     }
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const fetchDocuments = async () => {
+    try {
+      const response = await api.get(`/workspaces/${id}/documents`);
+      setDocuments(response.data);
+    } catch (error) {
+      console.error('Error fetching documents:', error);
+    }
+  };
+
+  const handleSend = async () => {
+    if (input.trim()) {
+      const newMessage: Message = { id: Date.now(), content: input, sender: 'user' };
+      setMessages([...messages, newMessage]);
+      setInput('');
+
+      try {
+        const response = await api.post(`/conversations/${id}/messages/`, {
+          content: input,
+          sender: 'user',
+        });
+        const aiMessage: Message = { id: response.data.id, content: response.data.content, sender: 'ai' };
+        setMessages(prev => [...prev, aiMessage]);
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // TODO: Implement file upload to backend
-      console.log('Uploading file:', file.name);
-      setDocuments(prev => [...prev, file.name]);
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+        await api.post(`/documents/?workspace_id=${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        fetchDocuments();
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
     }
   };
 
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       <div className="flex-grow">
-        <h1 className="text-3xl font-bold mb-6">Workspace {id}</h1>
+        <h1 className="text-3xl font-bold mb-6">Workspace: {workspaceName}</h1>
         <div className="card p-4 mb-4 h-96 overflow-y-auto">
           {messages.map((message) => (
             <div key={message.id} className={`mb-4 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
@@ -82,8 +119,8 @@ const Workspace: React.FC = () => {
           className="mb-4"
         />
         <ul className="card p-4 space-y-2">
-          {documents.map((doc, index) => (
-            <li key={index} className="text-gray-600">{doc}</li>
+          {documents.map((doc) => (
+            <li key={doc.id} className="text-gray-600">{doc.name}</li>
           ))}
         </ul>
       </div>

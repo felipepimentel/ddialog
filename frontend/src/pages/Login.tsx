@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    console.log('Login attempt with:', email, password);
+    try {
+      const response = await api.post('/token', { username: email, password });
+      localStorage.setItem('token', response.data.access_token);
+      navigate('/');
+    } catch (error) {
+      console.error('Login failed:', error);
+      // TODO: Show error message to user
+    }
   };
 
   return (

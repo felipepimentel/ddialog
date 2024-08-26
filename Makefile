@@ -1,4 +1,4 @@
-.PHONY: up down build logs shell-frontend shell-backend test-backend check-docker pull up-dev down-dev build-dev
+.PHONY: up down build logs shell-frontend shell-backend test-backend check-docker pull up-dev down-dev build-dev restart-dev
 
 check-docker:
 	@if ! docker info > /dev/null 2>&1; then \
@@ -58,3 +58,5 @@ init-dev: check-docker setup-env install-dependencies build-dev up-dev
 down-build-up: down build up
 
 down-build-up-dev: down-dev build-dev up-dev
+
+restart-dev: down-dev build-dev up-dev
