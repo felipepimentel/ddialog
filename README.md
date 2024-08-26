@@ -14,24 +14,21 @@ DDialog is an intelligent document-based conversation platform that enables user
 - Developer API for custom integrations
 - Cloud-deployment ready
 - Support for various vector databases
+- Dark/Light theme toggle with persistent user preference
 
 ## Project Structure
 
-The project consists of three main components:
+The project consists of two main components:
 
-1. Frontend (React + Vite)
-2. Backend (Node.js + Express)
-3. Document Processor (Node.js + Express)
+1. Frontend (React + Vite + TypeScript)
+2. Backend (FastAPI + PostgreSQL)
 
 ## Prerequisites
 
-- Node.js (v14 or later)
-- pnpm (v6 or later)
-- Docker and Docker Compose (for containerized deployment)
+- Docker and Docker Compose
+- Make (optional, for using Makefile commands)
 
-## Getting Started
-
-### Local Development
+## Quick Start
 
 1. Clone the repository:
    ```
@@ -39,38 +36,46 @@ The project consists of three main components:
    cd ddialog
    ```
 
-2. Install dependencies for each component:
+2. Initialize the project:
    ```
-   cd frontend && pnpm install
-   cd ../backend && pnpm install
-   cd ../document-processor && pnpm install
+   make init
    ```
+   This command will set up the environment, install dependencies, build Docker images, and start the services.
 
-3. Start the development servers:
-   
-   In separate terminal windows:
-   ```
-   # Frontend
-   cd frontend && pnpm run dev
+3. Access the application:
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:8000`
+   - API documentation: `http://localhost:8000/docs`
 
-   # Backend
-   cd backend && pnpm run dev
+## Development
 
-   # Document Processor
-   cd document-processor && pnpm run dev
-   ```
+### Common Commands
 
-4. Access the application at `http://localhost:5173`
+- Start the application: `make up`
+- Stop the application: `make down`
+- View logs: `make logs`
+- Rebuild Docker images: `make build`
+- Access frontend shell: `make shell-frontend`
+- Access backend shell: `make shell-backend`
+- Run backend tests: `make test-backend`
 
-### Docker Deployment
+### Hot Reloading
 
-1. Build and run the Docker containers:
-   ```
-   docker-compose up --build
-   ```
+Both frontend and backend support hot reloading. Any changes you make to the code will be reflected immediately without needing to restart the containers.
 
-2. Access the application at `http://localhost:80`
+### Adding Dependencies
+
+- Frontend: Run `pnpm add <package-name>` in the frontend container shell
+- Backend: Run `poetry add <package-name>` in the backend container shell
 
 ## Testing
 
 Run the test suite for the backend:
+
+## Environment Setup
+
+1. Copy the example environment file:
+   ```
+   make setup-env
+   ```
+2. Open `backend/.env` and replace the placeholder values with your actual OPENROUTER_API_KEY and database URL.

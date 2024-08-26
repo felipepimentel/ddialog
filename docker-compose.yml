@@ -1,32 +1,31 @@
-version: '3'
+version: '3.8'
 services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
-      - "80:80"
-    depends_on:
-      - backend
-      - document-processor
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: pnpm run dev
 
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/ddialog
-    depends_on:
-      - db
-
-  document-processor:
-    build:
-      context: ./document-processor
-      dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
+      - DATABASE_URL=postgresql://user:password@db:5432/ddialog
+    env_file:
+      - ./backend/.env
+    command: uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 
   db:
     image: postgres:13
