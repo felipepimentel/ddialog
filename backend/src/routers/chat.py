@@ -54,3 +54,46 @@ async def create_message(
     db.refresh(ai_message)
 
     return ai_message
+
+@router.get("/workspaces/{workspace_id}/messages", response_model=list[schemas.Message])
+def get_messages(workspace_id: int, db: Session = Depends(get_db)):
+    messages = db.query(models.Message).join(models.Conversation).filter(models.Conversation.workspace_id == workspace_id).all()
+    return messages
+
+@router.post("/workspaces/{workspace_id}/messages", response_model=schemas.Message)
+async def create_message(
+    workspace_id: int,
+    message: schemas.MessageCreate,
+    db: Session = Depends(get_db)
+):
+    # Check if the workspace exists
+    workspace = db.query(models.Workspace).filter(models.Workspace.id == workspace_id).first()
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+
+    # Create or get the conversation for this workspace
+    conversation = db.query(models.Conversation).filter(models.Conversation.workspace_id == workspace_id).first()
+    if not conversation:
+        conversation = models.Conversation(workspace_id=workspace_id)
+        db.add(conversation)
+        db.commit()
+        db.refresh(conversation)
+
+    # Create the user message
+    db_message = models.Message(**message.dict(), conversation_id=conversation.id)
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+
+    # Get AI response
+    documents = db.query(models.Document).filter(models.Document.workspace_id == workspace_id).all()
+    context = "\n".join([doc.content for doc in documents])
+    ai_response = await llm_service.get_llm_response(message.content, context)
+
+    # Create the AI message
+    ai_message = models.Message(content=ai_response, sender="ai", conversation_id=conversation.id)
+    db.add(ai_message)
+    db.commit()
+    db.refresh(ai_message)
+
+    return ai_message

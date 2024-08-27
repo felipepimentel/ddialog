@@ -167,3 +167,9 @@ __pycache__/
 
 
 .pytest_cache
+
+backend/src/alembic/versions/*.py
+
+vite.config.js
+
+.cursorrules

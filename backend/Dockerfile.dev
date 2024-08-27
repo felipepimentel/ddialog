@@ -1,35 +1,30 @@
 FROM python:3.9
 
-# Configura o diretório de trabalho
+# Set up the working directory
 WORKDIR /app
 
-# Instala o Poetry
-RUN pip install poetry
+# Install Poetry and netcat
+RUN pip install poetry && apt-get update && apt-get install -y netcat-openbsd
 
-# Copia o arquivo de configuração do Poetry e o lockfile
-COPY pyproject.toml poetry.lock* /app/
+# Copy only the pyproject.toml file
+COPY pyproject.toml /app/
 
-# Configura o Poetry para não criar um ambiente virtual
+# Generate a new poetry.lock file
+RUN poetry lock
+
+# Install project dependencies
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
-# Copia o arquivo .env para o contêiner
-COPY .env /app/.env
-
-# Sincroniza o poetry.lock com pyproject.toml para evitar erros de versão
-RUN poetry lock --no-update
-
-# Carrega as variáveis de ambiente do .env e instala as dependências
-RUN export $(cat /app/.env | xargs) && poetry install --no-interaction --no-ansi
-
-# Copia o restante do código para o container
+# Copy the rest of the application code
 COPY . /app
 
-# Remove the following line:
-# RUN poetry add pytest
+# Make the entrypoint script executable and ensure it has the correct line endings
+RUN chmod +x /app/entrypoint.sh && \
+    sed -i 's/\r$//' /app/entrypoint.sh
 
-# Expõe a porta para a aplicação
+# Expose the port for the application
 EXPOSE 8000
 
-# Comando padrão para iniciar a aplicação
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Use the entrypoint script
+CMD ["/bin/sh", "/app/entrypoint.sh"]

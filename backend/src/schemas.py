@@ -31,9 +31,7 @@ class WorkspaceCreate(WorkspaceBase):
 
 class Workspace(WorkspaceBase):
     id: int
-    owner_id: int
-    created_at: datetime
-    updated_at: datetime
+    owner_id: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -41,7 +39,6 @@ class Workspace(WorkspaceBase):
 class DocumentBase(BaseModel):
     name: str
     content: str
-    file_type: str
 
 class DocumentCreate(DocumentBase):
     workspace_id: int
@@ -69,6 +66,14 @@ class Message(MessageBase):
 
     class Config:
         orm_mode = True
+
+# Add these new schemas
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    email: Optional[str] = None
 
 class ConversationBase(BaseModel):
     workspace_id: int

@@ -3,27 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { signIn } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.post('/token', { username: email, password });
-      login(response.data.access_token);
+      await api.post('/auth/register', { email, password });
+      // After successful registration, sign in the user
+      await signIn(email, password);
       navigate('/');
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Registration failed:', error);
       // TODO: Show error message to user
     }
   };
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Register</h1>
       <form onSubmit={handleSubmit} className="card p-6 space-y-4">
         <div>
           <label htmlFor="email" className="block mb-1 font-medium">Email</label>
@@ -48,11 +49,11 @@ const Login: React.FC = () => {
           />
         </div>
         <button type="submit" className="btn btn-primary w-full">
-          Login
+          Register
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;

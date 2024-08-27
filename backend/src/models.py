@@ -25,10 +25,8 @@ class Workspace(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    description = Column(String)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    description = Column(String, nullable=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
     owner = relationship("User", back_populates="workspaces")
     documents = relationship("Document", back_populates="workspace")
@@ -40,7 +38,8 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     content = Column(Text)
-    file_type = Column(String)
+    # Remove the file_type column if it's not needed
+    # file_type = Column(String)
     workspace_id = Column(Integer, ForeignKey("workspaces.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
