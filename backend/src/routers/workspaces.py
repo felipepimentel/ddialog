@@ -18,22 +18,27 @@ def read_workspaces(
 ):
     try:
         workspaces = db.query(models.Workspace).offset(skip).limit(limit).all()
+        logger.info(f"Retrieved {len(workspaces)} workspaces")
         return workspaces
     except Exception as e:
-        logger.error(f"Error fetching workspaces: {str(e)}")
-        logger.error(traceback.format_exc())
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+        logger.error(f"Error fetching workspaces: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.post("/", response_model=schemas.Workspace)
 def create_workspace(
     workspace: schemas.WorkspaceCreate,
     db: Session = Depends(get_db)
 ):
-    db_workspace = models.Workspace(**workspace.dict())
-    db.add(db_workspace)
-    db.commit()
-    db.refresh(db_workspace)
-    return db_workspace
+    try:
+        db_workspace = models.Workspace(**workspace.dict())
+        db.add(db_workspace)
+        db.commit()
+        db.refresh(db_workspace)
+        logger.info(f"Created new workspace: {db_workspace.id}")
+        return db_workspace
+    except Exception as e:
+        logger.error(f"Error creating workspace: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/{workspace_id}", response_model=schemas.Workspace)
 def read_workspace(
