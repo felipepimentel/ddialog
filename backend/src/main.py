@@ -12,13 +12,13 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-# Configure CORS - more permissive
+# Configure CORS - specific origin
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins
+    allow_origins=["http://localhost:3000"],  # Specify the frontend origin
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Create database tables
