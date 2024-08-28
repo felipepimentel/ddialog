@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Workspace } from '../../types/workspace';
 import api from '../../services/api';
 
-const WorkspaceList: React.FC = () => {
+interface WorkspaceListProps {
+  onSelectWorkspace: (workspaceId: number) => void;
+  selectedWorkspace: number | null;
+}
+
+const WorkspaceList: React.FC<WorkspaceListProps> = ({ onSelectWorkspace, selectedWorkspace }) => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
 
   useEffect(() => {
@@ -20,20 +24,21 @@ const WorkspaceList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Workspaces</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {workspaces.map((workspace) => (
-          <Link
-            key={workspace.id}
-            to={`/workspace/${workspace.id}`}
-            className="card p-6 hover:shadow-lg transition-shadow duration-200"
-          >
-            <h3 className="text-xl font-semibold mb-2">{workspace.name}</h3>
-            <p className="text-gray-600">{workspace.description}</p>
-          </Link>
-        ))}
-      </div>
+    <div className="space-y-2">
+      {workspaces.map((workspace) => (
+        <button
+          key={workspace.id}
+          onClick={() => onSelectWorkspace(workspace.id)}
+          className={`w-full text-left p-2 rounded ${
+            selectedWorkspace === workspace.id
+              ? 'bg-blue-100 dark:bg-blue-900'
+              : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+          }`}
+        >
+          <h3 className="font-semibold">{workspace.name}</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{workspace.description}</p>
+        </button>
+      ))}
     </div>
   );
 };

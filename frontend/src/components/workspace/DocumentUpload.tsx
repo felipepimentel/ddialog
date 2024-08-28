@@ -1,57 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import api from '../../services/api';
 
 interface DocumentUploadProps {
   workspaceId: string;
-  onUploadSuccess?: () => void;
+  onUpload: (fileNames: string[]) => void;
+  children: React.ReactNode;
 }
 
-const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUploadSuccess }) => {
-  const [file, setFile] = useState<File | null>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUpload, children }) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFile(e.target.files[0]);
-    }
-  };
+      const files = Array.from(e.target.files);
+      const formData = new FormData();
+      files.forEach((file) => formData.append('files', file));
 
-  const handleUpload = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      await api.post(`/workspaces/${workspaceId}/documents`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      setFile(null);
-      if (onUploadSuccess) {
-        onUploadSuccess();
+      try {
+        const response = await api.post(`/workspaces/${workspaceId}/documents`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        onUpload(response.data.fileNames);
+      } catch (error) {
+        console.error('Error uploading documents:', error);
       }
-    } catch (error) {
-      console.error('Error uploading document:', error);
     }
   };
 
   return (
-    <form onSubmit={handleUpload} className="mb-4">
+    <label className="p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200">
+      {children}
       <input
         type="file"
+        multiple
         onChange={handleFileChange}
-        className="mb-2"
+        className="hidden"
       />
-      <button
-        type="submit"
-        disabled={!file}
-        className="btn btn-primary"
-      >
-        Upload Document
-      </button>
-    </form>
+    </label>
   );
 };
 

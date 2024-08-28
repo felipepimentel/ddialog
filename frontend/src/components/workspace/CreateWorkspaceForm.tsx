@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import api from '../../services/api';
 
-const CreateWorkspaceForm: React.FC = () => {
+interface CreateWorkspaceFormProps {
+  onWorkspaceCreated?: () => void;
+}
+
+const CreateWorkspaceForm: React.FC<CreateWorkspaceFormProps> = ({ onWorkspaceCreated }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -11,7 +15,9 @@ const CreateWorkspaceForm: React.FC = () => {
       await api.post('/workspaces', { name, description });
       setName('');
       setDescription('');
-      // Optionally, you can trigger a refresh of the workspace list here
+      if (onWorkspaceCreated) {
+        onWorkspaceCreated();
+      }
     } catch (error) {
       console.error('Error creating workspace:', error);
     }
