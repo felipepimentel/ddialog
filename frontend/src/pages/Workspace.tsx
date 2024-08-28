@@ -27,7 +27,6 @@ const Workspace: React.FC = () => {
     } catch (error) {
       console.error('Error fetching workspace data:', error);
       setError('Failed to load workspace. Please try again.');
-      // Optionally, redirect to home page after a delay
       setTimeout(() => navigate('/'), 5000);
     } finally {
       setIsLoading(false);
@@ -45,7 +44,7 @@ const Workspace: React.FC = () => {
     <div className="flex flex-col lg:flex-row gap-8">
       <div className="lg:w-3/4">
         <h1 className="text-3xl font-bold mb-6">Workspace: {workspaceName}</h1>
-        <ChatWindow workspaceId={id || ''} />
+        <ChatWindow workspaceId={parseInt(id || '0', 10)} />
       </div>
       <div className="lg:w-1/4 space-y-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">

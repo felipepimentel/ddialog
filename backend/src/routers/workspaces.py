@@ -44,31 +44,3 @@ def read_workspace(
     if workspace is None:
         raise HTTPException(status_code=404, detail="Workspace not found")
     return workspace
-
-@router.put("/{workspace_id}", response_model=schemas.Workspace)
-def update_workspace(
-    workspace_id: int,
-    workspace_update: schemas.WorkspaceCreate,
-    db: Session = Depends(get_db)
-):
-    db_workspace = db.query(models.Workspace).filter(models.Workspace.id == workspace_id).first()
-    if db_workspace is None:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-    for var, value in vars(workspace_update).items():
-        setattr(db_workspace, var, value) if value else None
-    db.add(db_workspace)
-    db.commit()
-    db.refresh(db_workspace)
-    return db_workspace
-
-@router.delete("/{workspace_id}", status_code=204)
-def delete_workspace(
-    workspace_id: int,
-    db: Session = Depends(get_db)
-):
-    db_workspace = db.query(models.Workspace).filter(models.Workspace.id == workspace_id).first()
-    if db_workspace is None:
-        raise HTTPException(status_code=404, detail="Workspace not found")
-    db.delete(db_workspace)
-    db.commit()
-    return {"ok": True}

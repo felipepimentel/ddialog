@@ -1,24 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-import enum
-from .database import Base  # Add this line to import Base
-
-class UserRole(enum.Enum):
-    USER = "user"
-    ADMIN = "admin"
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    role = Column(Enum(UserRole), default=UserRole.USER)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-
-    workspaces = relationship("Workspace", back_populates="owner")
+from .database import Base
 
 class Workspace(Base):
     __tablename__ = "workspaces"
@@ -26,9 +9,7 @@ class Workspace(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String, nullable=True)
-    owner_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
-    owner = relationship("User", back_populates="workspaces")
     documents = relationship("Document", back_populates="workspace")
     conversations = relationship("Conversation", back_populates="workspace")
 
@@ -38,8 +19,6 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     content = Column(Text)
-    # Remove the file_type column if it's not needed
-    # file_type = Column(String)
     workspace_id = Column(Integer, ForeignKey("workspaces.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -62,7 +41,7 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     content = Column(Text)
-    sender = Column(String)  # 'user' or 'ai'
+    sender = Column(String)
     conversation_id = Column(Integer, ForeignKey("conversations.id"))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

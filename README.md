@@ -1,86 +1,127 @@
-# DDialog
+# DDialog: Intelligent Document-Based Conversation Platform
 
-DDialog is an intelligent document-based conversation platform that enables users to have meaningful interactions with their documents using advanced Language Learning Models (LLMs) and vector databases.
+DDialog is an advanced, AI-powered conversation platform that enables meaningful interactions with your documents. It leverages OpenRouter API and FastAPI to provide intelligent responses based on your document context.
 
-## Features
+## 🌟 Features
 
-- Multi-modal LLM support (both open-source and commercial)
-- Workspace-based document organization
-- Multi-user support with permissions
-- Support for multiple document types (PDF, TXT, DOCX, etc.)
-- Drag-and-drop document upload
-- Clear citation and source tracking
-- Cost and time-saving measures for large document management
-- Developer API for custom integrations
-- Cloud-deployment ready
-- Support for various vector databases
-- Dark/Light theme toggle with persistent user preference
+- 🧠 Integration with OpenRouter API for advanced language model capabilities
+- 🗂️ Workspace-based document organization
+- 💬 Real-time chat interface with AI responses
+- 📄 Support for document upload and management
+- 🌓 Dark/Light theme toggle (frontend ready)
 
-## Project Structure
+## 🏗️ Project Structure
 
 The project consists of two main components:
 
-1. Frontend (React + Vite + TypeScript)
-2. Backend (FastAPI + PostgreSQL)
+1. Frontend (React + TypeScript + Vite)
+2. Backend (FastAPI + SQLAlchemy + PostgreSQL)
 
-## Prerequisites
+## 🚀 Quick Start
 
-- Docker and Docker Compose
-- Make (optional, for using Makefile commands)
-
-## Quick Start
+### Using Docker (Recommended)
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/ddialog.git
+   git clone https://github.com/felipepimentel/ddialog.git
    cd ddialog
    ```
 
-2. Initialize the project:
+2. Create a `.env` file in the root directory and add your OpenRouter API key:
    ```
-   make init
+   OPENROUTER_API_KEY=your_api_key_here
    ```
-   This command will set up the environment, install dependencies, build Docker images, and start the services.
 
-3. Access the application:
-   - Frontend: `http://localhost:3000`
-   - Backend API: `http://localhost:8000`
-   - API documentation: `http://localhost:8000/docs`
-
-## Development
-
-### Common Commands
-
-- Start the application (production): `make up`
-- Start the application (development): `make up-dev`
-- Stop the application (production): `make down`
-- Stop the application (development): `make down-dev`
-- View logs: `make logs`
-- Rebuild Docker images (production): `make build`
-- Rebuild Docker images (development): `make build-dev`
-- Stop, rebuild, and start (production): `make down-build-up`
-- Stop, rebuild, and start (development): `make down-build-up-dev`
-- Access frontend shell: `make shell-frontend`
-- Access backend shell: `make shell-backend`
-- Run backend tests: `make test-backend`
-
-### Hot Reloading
-
-Both frontend and backend support hot reloading. Any changes you make to the code will be reflected immediately without needing to restart the containers.
-
-### Adding Dependencies
-
-- Frontend: Run `pnpm add <package-name>` in the frontend container shell
-- Backend: Run `poetry add <package-name>` in the backend container shell
-
-## Testing
-
-Run the test suite for the backend:
-
-## Environment Setup
-
-1. Copy the example environment file:
+3. Build and run the Docker containers:
    ```
-   make setup-env
+   docker-compose up --build
    ```
-2. Open `backend/.env` and replace the placeholder values with your actual OPENROUTER_API_KEY and database URL.
+
+4. Access the application at `http://localhost:3000`
+
+### Manual Setup
+
+#### Backend
+
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
+
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. Set up the database:
+   ```
+   alembic upgrade head
+   ```
+
+4. Run the FastAPI server:
+   ```
+   uvicorn src.main:app --reload
+   ```
+
+#### Frontend
+
+1. Navigate to the frontend directory:
+   ```
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Run the development server:
+   ```
+   npm run dev
+   ```
+
+4. Access the application at `http://localhost:3000`
+
+## 📚 API Documentation
+
+Once the backend is running, you can access the API documentation at `http://localhost:8000/docs`
+
+## 🧪 Key Components
+
+### Backend
+
+- `llm_service.py`: Handles communication with the OpenRouter API
+- `chat.py`: Contains API routes for conversation and message handling
+- `schemas.py`: Defines Pydantic models for data validation
+
+### Frontend
+
+- `ChatWindow.tsx`: Main component for the chat interface
+- `Workspace.tsx`: Component for managing workspaces and documents
+
+## 📝 Usage
+
+1. Create a workspace
+2. Upload documents to the workspace
+3. Start a conversation in the chat window
+4. The AI will provide responses based on the uploaded documents and conversation context
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgements
+
+- OpenRouter for their API
+- FastAPI team for their excellent web framework
+- React team for their powerful frontend library
+
+## 📞 Support
+
+If you encounter any issues or have questions, please file an issue on the GitHub repository.
+
+Happy chatting with DDialog! 🚀

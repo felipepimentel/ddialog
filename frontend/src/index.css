@@ -96,3 +96,9 @@
 .card {
   @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 ease-in-out dark:bg-gray-800;
 }
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+}

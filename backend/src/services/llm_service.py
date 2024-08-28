@@ -7,14 +7,17 @@ load_dotenv()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-async def get_llm_response(message: str) -> str:
+async def get_llm_response(message: str, context: str) -> str:
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json"
     }
     data = {
-        "model": "openai/gpt-3.5-turbo",  # You can change this to any supported model
-        "messages": [{"role": "user", "content": message}]
+        "model": "openai/gpt-3.5-turbo",
+        "messages": [
+            {"role": "system", "content": f"You are an AI assistant. Use the following context to answer the user's question: {context}"},
+            {"role": "user", "content": message}
+        ]
     }
 
     async with httpx.AsyncClient() as client:

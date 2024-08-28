@@ -1,26 +1,6 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-from enum import Enum
-
-class UserRole(str, Enum):
-    USER = "user"
-    ADMIN = "admin"
-
-class UserBase(BaseModel):
-    email: EmailStr
-
-class UserCreate(UserBase):
-    password: str
-
-class User(UserBase):
-    id: int
-    role: UserRole
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        orm_mode = True
 
 class WorkspaceBase(BaseModel):
     name: str
@@ -31,7 +11,6 @@ class WorkspaceCreate(WorkspaceBase):
 
 class Workspace(WorkspaceBase):
     id: int
-    owner_id: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -56,8 +35,10 @@ class MessageBase(BaseModel):
     content: str
     sender: str
 
-class MessageCreate(MessageBase):
-    conversation_id: int
+class MessageCreate(BaseModel):
+    content: str
+    sender: str
+    conversation_id: Optional[int] = None
 
 class Message(MessageBase):
     id: int
@@ -66,14 +47,6 @@ class Message(MessageBase):
 
     class Config:
         orm_mode = True
-
-# Add these new schemas
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-class TokenData(BaseModel):
-    email: Optional[str] = None
 
 class ConversationBase(BaseModel):
     workspace_id: int
