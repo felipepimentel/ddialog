@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Workspace } from '../../types/workspace';
 import api from '../../services/api';
 import CreateWorkspaceModal from './CreateWorkspaceModal';
-import { PlusCircle, Settings, LogOut } from 'lucide-react';
+import { PlusCircle, Settings, LogOut, Briefcase } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { ScrollArea } from "../ui/scroll-area";
@@ -65,7 +65,10 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
   };
 
   return (
-    <div className="w-20 h-full flex flex-col bg-secondary border-r border-border">
+    <div className="w-20 h-full flex flex-col bg-gray-800 border-r border-gray-700">
+      <div className="p-4 flex justify-center">
+        <Briefcase className="h-8 w-8 text-blue-400" />
+      </div>
       <ScrollArea className="flex-1 w-full">
         <div className="p-2 space-y-2">
           {workspaces.map((workspace) => (
@@ -75,7 +78,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
                   <Button
                     onClick={() => onSelectWorkspace(workspace.id)}
                     variant={selectedWorkspace === workspace.id ? "secondary" : "ghost"}
-                    className={`w-14 h-14 rounded-full ${getColor(workspace.id)} text-white font-bold hover:ring-2 hover:ring-offset-2 hover:ring-offset-background hover:ring-primary transition-all`}
+                    className={`w-14 h-14 rounded-full ${getColor(workspace.id)} text-white font-bold hover:ring-2 hover:ring-offset-2 hover:ring-offset-gray-800 hover:ring-blue-400 transition-all`}
                   >
                     {getInitials(workspace.name)}
                   </Button>
@@ -92,7 +95,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
               <Button
                 onClick={() => setIsCreateModalOpen(true)}
                 variant="outline"
-                className="w-14 h-14 rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
+                className="w-14 h-14 rounded-full hover:bg-blue-500 hover:text-white transition-colors"
               >
                 <PlusCircle className="h-6 w-6" />
               </Button>
@@ -104,7 +107,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-14 h-14 rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
+                className="w-14 h-14 rounded-full hover:bg-gray-700 transition-colors"
               >
                 <Settings className="h-6 w-6" />
               </Button>
@@ -116,7 +119,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-14 h-14 rounded-full hover:bg-destructive hover:text-destructive-foreground transition-colors"
+                className="w-14 h-14 rounded-full hover:bg-red-500 hover:text-white transition-colors"
               >
                 <LogOut className="h-6 w-6" />
               </Button>

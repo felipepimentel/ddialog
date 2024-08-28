@@ -4,6 +4,7 @@ import { Input } from '../ui/input';
 import { ScrollArea } from '../ui/scroll-area';
 import { Send, Paperclip, Mic, User, Bot } from 'lucide-react';
 import api from '../../services/api';
+import WorkspaceHeader from './WorkspaceHeader';
 
 interface Message {
   id: number;
@@ -63,18 +64,19 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
 
   if (!workspaceId) {
     return (
-      <div className="h-full flex flex-col items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900">
-        <p className="text-2xl font-semibold text-gray-600 dark:text-gray-300 mb-4">Select a workspace to start chatting</p>
-        <p className="text-gray-500 dark:text-gray-400">Choose a workspace from the left sidebar or create a new one</p>
+      <div className="h-full flex flex-col items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <p className="text-3xl font-bold mb-4">Welcome to DDialog</p>
+        <p className="text-xl mb-8">Select a workspace to start chatting</p>
+        <Button variant="outline" className="text-white border-white hover:bg-white hover:text-blue-600">
+          Create New Workspace
+        </Button>
       </div>
     );
   }
 
   return (
-    <div className="h-full flex flex-col bg-background">
-      <div className="p-4 border-b border-border">
-        <h2 className="text-xl font-semibold">Workspace Chat</h2>
-      </div>
+    <div className="h-full flex flex-col bg-gray-900 text-white">
+      <WorkspaceHeader workspaceName="Current Workspace" />
       <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
         {messages.map((message) => (
           <div
@@ -86,8 +88,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
             <div
               className={`p-3 rounded-lg max-w-[70%] ${
                 message.sender === 'user'
-                  ? 'bg-blue-100 dark:bg-blue-800 ml-auto'
-                  : 'bg-gray-100 dark:bg-gray-700'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-white'
               }`}
             >
               <div className="flex items-center mb-1">
@@ -96,18 +98,18 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
                 ) : (
                   <Bot className="h-4 w-4 mr-2" />
                 )}
-                <small className="text-xs text-gray-500 dark:text-gray-400">
+                <small className="text-xs opacity-75">
                   {new Date(message.timestamp).toLocaleTimeString()}
                 </small>
               </div>
-              <p className="text-gray-800 dark:text-gray-200">{message.content}</p>
+              <p>{message.content}</p>
             </div>
           </div>
         ))}
       </ScrollArea>
-      <div className="p-4 border-t border-border">
-        <div className="flex space-x-2 items-center bg-gray-100 dark:bg-gray-800 p-2 rounded-lg">
-          <Button variant="ghost" size="icon">
+      <div className="p-4 border-t border-gray-700">
+        <div className="flex space-x-2 items-center bg-gray-800 p-2 rounded-lg">
+          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
             <Paperclip className="h-5 w-5" />
           </Button>
           <Input
@@ -115,12 +117,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Type your message..."
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            className="flex-grow bg-transparent border-none focus:ring-0"
+            className="flex-grow bg-transparent border-none focus:ring-0 text-white placeholder-gray-400"
           />
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
             <Mic className="h-5 w-5" />
           </Button>
-          <Button onClick={sendMessage} variant="primary" size="icon">
+          <Button onClick={sendMessage} variant="primary" size="icon" className="bg-blue-600 hover:bg-blue-700">
             <Send className="h-5 w-5" />
           </Button>
         </div>
