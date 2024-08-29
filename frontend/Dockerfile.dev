@@ -2,13 +2,20 @@ FROM node:18
 
 WORKDIR /app
 
+# Instala pnpm globalmente
 RUN npm install -g pnpm
 
+# Copia apenas os arquivos essenciais primeiro para aproveitar o cache
 COPY package.json pnpm-lock.yaml ./
+
+# Instala dependências
 RUN pnpm install
 
+# Copia o restante do código
 COPY . .
 
-EXPOSE 3000
+# Exponha a porta 5173 para o frontend
+EXPOSE 5173
 
+# Comando para iniciar a aplicação em modo de desenvolvimento
 CMD ["pnpm", "run", "dev"]

@@ -3,11 +3,11 @@ import api from '../../services/api';
 
 interface DocumentUploadProps {
   workspaceId: string;
-  onUpload: (fileNames: string[]) => void;
+  onUploadSuccess: () => void;
   children: React.ReactNode;
 }
 
-const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUpload, children }) => {
+const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUploadSuccess, children }) => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
@@ -18,7 +18,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUpload, 
         const response = await api.post(`/workspaces/${workspaceId}/documents`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        onUpload(response.data.fileNames);
+        onUploadSuccess();
       } catch (error) {
         console.error('Error uploading documents:', error);
       }

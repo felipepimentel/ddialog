@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Workspace } from '../../types/workspace';
-import api from '../../services/api';
-import CreateWorkspaceModal from './CreateWorkspaceModal';
+import { Workspace } from '@/types/workspace';
+import api from '@/services/api';
+import CreateWorkspaceModal from '@/components/workspace/CreateWorkspaceModal';
 import { PlusCircle, Settings, LogOut, Briefcase } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
-import { ScrollArea } from "../ui/scroll-area";
-import { useToast } from "../ui/use-toast";
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/components/ui/use-toast";
 
 interface WorkspaceMenuProps {
   onSelectWorkspace: (workspaceId: number) => void;

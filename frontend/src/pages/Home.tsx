@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import WorkspaceMenu from '../components/workspace/WorkspaceMenu';
-import ChatWindow from '../components/workspace/ChatWindow';
-import { Toaster } from "../components/ui/toaster";
-import { Button } from '../components/ui/button';
+import WorkspaceMenu from '@/components/workspace/WorkspaceMenu';
+import ChatWindow from '@/components/workspace/ChatWindow';
+import { Toaster } from "@/components/ui/toaster";
+import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 
 const Home: React.FC = () => {

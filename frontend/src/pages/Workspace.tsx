@@ -49,7 +49,9 @@ const Workspace: React.FC = () => {
       <div className="lg:w-1/4 space-y-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Upload Document</h2>
-          <DocumentUpload workspaceId={id || ''} onUploadSuccess={handleUploadSuccess} />
+          <DocumentUpload workspaceId={id || ''} onUploadSuccess={handleUploadSuccess}>
+            Upload
+          </DocumentUpload>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">Documents</h2>

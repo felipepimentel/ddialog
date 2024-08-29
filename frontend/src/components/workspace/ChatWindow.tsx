@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, KeyboardEvent } from 'react';
-import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import { ScrollArea } from '../ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Send, Paperclip, Mic, User, Bot } from 'lucide-react';
-import api from '../../services/api';
-import WorkspaceHeader from './WorkspaceHeader';
+import api from '@/services/api';
+import WorkspaceHeader from '@/components/workspace/WorkspaceHeader';
 
 interface Message {
   id: number;
