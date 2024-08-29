@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
 
@@ -38,7 +38,6 @@ class MessageBase(BaseModel):
 class MessageCreate(BaseModel):
     content: str
     sender: str
-    conversation_id: Optional[int] = None
 
 class Message(MessageBase):
     id: int
@@ -57,7 +56,7 @@ class ConversationCreate(ConversationBase):
 class Conversation(ConversationBase):
     id: int
     created_at: datetime
-    updated_at: datetime
+    updated_at: Optional[datetime] = None
     messages: List[Message] = []
 
     class Config:

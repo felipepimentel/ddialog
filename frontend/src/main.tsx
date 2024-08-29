@@ -1,14 +1,13 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { ThemeProvider } from "./components/theme-provider"
+import ErrorBoundary from './components/ErrorBoundary'
 
-const root = createRoot(document.getElementById('root')!)
-root.render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ErrorBoundary>
       <App />
-    </ThemeProvider>
-  </React.StrictMode>
+    </ErrorBoundary>
+  </React.StrictMode>,
 )

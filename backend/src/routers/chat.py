@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from ..routers.workspaces import get_workspace_or_404
 from ..database import get_db
 from .. import models, schemas
 from ..services import llm_service
@@ -9,31 +10,55 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 @router.get("/workspaces/{workspace_id}/conversation", response_model=schemas.Conversation)
-async def get_or_create_conversation(
-    workspace_id: int,
-    db: Session = Depends(get_db)
-):
-    try:
-        # Check if the workspace exists
-        workspace = db.query(models.Workspace).filter(models.Workspace.id == workspace_id).first()
-        if not workspace:
-            logger.warning(f"Workspace not found: {workspace_id}")
-            raise HTTPException(status_code=404, detail="Workspace not found")
+async def get_or_create_conversation(workspace_id: int, db: Session = Depends(get_db)):
+    workspace = get_workspace_or_404(workspace_id, db)
+    print(f"workspace: {workspace}")
+    conversation = db.query(models.Conversation).filter(models.Conversation.workspace_id == workspace_id).first()
+    if not conversation:
+        conversation = models.Conversation(workspace_id=workspace_id)
+        db.add(conversation)
+        db.commit()
+        db.refresh(conversation)
+    return conversation
 
-        # Get or create the conversation for this workspace
-        conversation = db.query(models.Conversation).filter(models.Conversation.workspace_id == workspace_id).first()
-        if not conversation:
-            conversation = models.Conversation(workspace_id=workspace_id)
-            db.add(conversation)
-            db.commit()
-            db.refresh(conversation)
-            logger.info(f"Created new conversation for workspace: {workspace_id}")
-        else:
-            logger.info(f"Retrieved existing conversation for workspace: {workspace_id}")
+@router.get("/conversations/{conversation_id}/messages", response_model=list[schemas.Message])
+async def get_messages(conversation_id: int, db: Session = Depends(get_db)):
+    messages = db.query(models.Message).filter(models.Message.conversation_id == conversation_id).all()
+    return messages
 
-        return conversation
-    except Exception as e:
-        logger.error(f"Error in get_or_create_conversation: {str(e)}", exc_info=True)
-        raise HTTPException(status_code=500, detail="Internal server error")
+@router.post("/workspaces/{workspace_id}/messages", response_model=schemas.Message)
+async def create_message(workspace_id: int, message: schemas.MessageCreate, db: Session = Depends(get_db)):
+    workspace = get_workspace_or_404(workspace_id, db)
+    print(f"workspace: {workspace}")
+    conversation = db.query(models.Conversation).filter(models.Conversation.workspace_id == workspace_id).first()
+    if not conversation:
+        conversation = models.Conversation(workspace_id=workspace_id)
+        db.add(conversation)
+        db.commit()
+        db.refresh(conversation)
 
-# Add other chat-related routes here with similar error handling and logging
+    db_message = models.Message(
+        content=message.content,
+        sender=message.sender,
+        conversation_id=conversation.id
+    )
+    db.add(db_message)
+    db.commit()
+    db.refresh(db_message)
+
+    if message.sender == 'user':
+        documents = db.query(models.Document).filter(models.Document.workspace_id == workspace_id).all()
+        context = "\n".join([doc.content for doc in documents])
+        ai_response = await llm_service.get_llm_response(message.content, context)
+
+        ai_message = models.Message(
+            content=ai_response,
+            sender="ai",
+            conversation_id=conversation.id
+        )
+        db.add(ai_message)
+        db.commit()
+        db.refresh(ai_message)
+        return ai_message
+
+    return db_message

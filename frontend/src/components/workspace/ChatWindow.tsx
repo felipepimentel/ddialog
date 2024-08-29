@@ -29,6 +29,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isAiTyping, setIsAiTyping] = useState(false);
   const [conversation, setConversation] = useState<Conversation | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (workspaceId) {
@@ -42,17 +43,19 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
 
   const fetchConversationAndMessages = async () => {
     try {
+      setError(null);
       const conversationResponse = await api.get(`/workspaces/${workspaceId}/conversation`);
       setConversation(conversationResponse.data);
       const messagesResponse = await api.get(`/conversations/${conversationResponse.data.id}/messages`);
       setMessages(messagesResponse.data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching conversation and messages:', error);
+      setError(error.message || 'Failed to load conversation. Please try again.');
     }
   };
 
   const sendMessage = async () => {
-    if (!inputMessage.trim() || !workspaceId || !conversation) return;
+    if (!inputMessage.trim() || !workspaceId) return;
 
     try {
       const userMessage = { id: Date.now(), content: inputMessage, sender: 'user' as const, timestamp: new Date().toISOString() };
@@ -63,7 +66,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
       const response = await api.post(`/workspaces/${workspaceId}/messages`, {
         content: inputMessage,
         sender: 'user',
-        conversation_id: conversation.id
       });
 
       setIsAiTyping(false);
@@ -109,6 +111,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
   return (
     <div className="h-full flex flex-col bg-gray-900 text-white">
       <WorkspaceHeader workspaceName="Current Workspace" />
+      {error && (
+        <div className="bg-red-500 text-white p-2 text-center">
+          {error}
+        </div>
+      )}
       <ScrollArea className="flex-grow p-4 overflow-y-auto" orientation="vertical">
         {messages.map((message) => (
           <div

@@ -68,6 +68,9 @@ test-coverage: check-docker
 test-backend-dev: check-docker
 	docker compose -f $(COMPOSE_DEV_FILE) run --rm backend poetry run pytest
 
+restart-backend: check-docker
+	docker compose -f $(COMPOSE_DEV_FILE) restart backend
+
 # Initialization
 install-dependencies: check-dependencies
 	@(cd frontend && pnpm install) &
