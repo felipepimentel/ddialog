@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Textarea } from "@/components/ui/textarea";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ChevronDown, Paperclip, ImageIcon, Smile, Mic, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-import IconButton from '@/components/ui/IconButton';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -14,34 +14,27 @@ interface ChatInputProps {
 
 const ChatInputActions: React.FC = () => {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <IconButton 
-          icon={<ChevronDown className="h-5 w-5" />}
-          tooltip="More options"
-        />
-      </PopoverTrigger>
-      <PopoverContent className="w-64">
-        <Command>
-          <CommandList>
-            <CommandGroup heading="Actions">
-              <CommandItem>
-                <Paperclip className="mr-2 h-4 w-4" />
-                <span>Attach file</span>
-              </CommandItem>
-              <CommandItem>
-                <ImageIcon className="mr-2 h-4 w-4" />
-                <span>Upload image</span>
-              </CommandItem>
-              <CommandItem>
-                <Smile className="mr-2 h-4 w-4" />
-                <span>Choose emoji</span>
-              </CommandItem>
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <ChevronDown className="h-5 w-5" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56">
+        <DropdownMenuItem>
+          <Paperclip className="mr-2 h-4 w-4" />
+          <span>Attach file</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <ImageIcon className="mr-2 h-4 w-4" />
+          <span>Upload image</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Smile className="mr-2 h-4 w-4" />
+          <span>Choose emoji</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -71,44 +64,60 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isDarkMode, chatCo
   };
 
   return (
-    <div className={cn(
-      "p-4 border-t rounded-b-lg backdrop-blur-sm",
-      isDarkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-white/50"
-    )}>
+    <TooltipProvider>
       <div className={cn(
-        "flex space-x-2 items-end p-2 rounded-lg",
-        isDarkMode ? "bg-gray-700/50" : "bg-gray-100/50"
+        "p-4 border-t rounded-b-lg backdrop-blur-sm",
+        isDarkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-white/50"
       )}>
-        <ChatInputActions />
-        <Textarea
-          ref={textareaRef}
-          value={inputMessage}
-          onChange={(e) => {
-            setInputMessage(e.target.value);
-            adjustTextareaHeight();
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder="Type your message..."
-          className={cn(
-            "flex-grow border-none focus:ring-0 resize-none min-h-[40px] max-h-[200px] overflow-y-auto transition-all duration-200",
-            isDarkMode ? "bg-transparent text-white placeholder-gray-400" : "bg-transparent text-gray-900 placeholder-gray-500"
-          )}
-          rows={1}
-        />
-        <IconButton 
-          icon={<Mic className="h-5 w-5" />}
-          tooltip="Voice input"
-        />
-        <IconButton 
-          icon={<Send className="h-5 w-5" />}
-          onClick={handleSendMessage}
-          tooltip="Send message"
-          variant="default"
-          className="transition-all duration-200 hover:scale-105"
-          style={{ backgroundColor: chatColor }}
-        />
+        <div className={cn(
+          "flex space-x-2 items-end p-2 rounded-lg",
+          isDarkMode ? "bg-gray-700/50" : "bg-gray-100/50"
+        )}>
+          <ChatInputActions />
+          <Textarea
+            ref={textareaRef}
+            value={inputMessage}
+            onChange={(e) => {
+              setInputMessage(e.target.value);
+              adjustTextareaHeight();
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder="Type your message..."
+            className={cn(
+              "flex-grow border-none focus:ring-0 resize-none min-h-[40px] max-h-[200px] overflow-y-auto transition-all duration-200",
+              isDarkMode ? "bg-transparent text-white placeholder-gray-400" : "bg-transparent text-gray-900 placeholder-gray-500"
+            )}
+            rows={1}
+          />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Mic className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Voice input</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={handleSendMessage}
+                variant="default"
+                size="icon"
+                className="transition-all duration-200 hover:scale-105"
+                style={{ backgroundColor: chatColor }}
+              >
+                <Send className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Send message</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 };
 

@@ -4,7 +4,8 @@ import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import ChatBubble from './ChatBubble';
-import IconButton from '@/components/ui/IconButton';
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface MessageItemProps {
   message: {
@@ -50,12 +51,26 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isDarkMode, chatColo
         chatColor={chatColor}
       />
       {message.sender === 'ai' && (
-        <IconButton
-          icon={copiedMessageId === message.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-          onClick={() => copyMessageContent(message.id, message.content)}
-          tooltip="Copy message"
-          className={cn("h-6 w-6 transition-all duration-200", isDarkMode ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50")}
-        />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => copyMessageContent(message.id, message.content)}
+                className={cn(
+                  "h-6 w-6 transition-all duration-200",
+                  isDarkMode ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
+                )}
+              >
+                {copiedMessageId === message.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy message</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </motion.div>
   );
