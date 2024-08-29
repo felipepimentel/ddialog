@@ -22,18 +22,21 @@ The project consists of two main components:
 ### Using Docker (Recommended)
 
 1. Clone the repository:
-   ```
+
+   ```bash
    git clone https://github.com/felipepimentel/ddialog.git
    cd ddialog
    ```
 
 2. Create a `.env` file in the root directory and add your OpenRouter API key:
-   ```
+
+   ```env
    OPENROUTER_API_KEY=your_api_key_here
    ```
 
 3. Build and run the Docker containers:
-   ```
+
+   ```bash
    docker compose up --build
    ```
 
@@ -44,39 +47,46 @@ The project consists of two main components:
 #### Backend
 
 1. Navigate to the backend directory:
-   ```
+
+   ```bash
    cd backend
    ```
 
 2. Install dependencies:
-   ```
+
+   ```bash
    pip install -r requirements.txt
    ```
 
 3. Set up the database:
-   ```
+
+   ```bash
    alembic upgrade head
    ```
 
 4. Run the FastAPI server:
-   ```
+
+   ```bash
    uvicorn src.main:app --reload
    ```
 
 #### Frontend
 
 1. Navigate to the frontend directory:
-   ```
+
+   ```bash
    cd frontend
    ```
 
 2. Install dependencies:
-   ```
+
+   ```bash
    npm install
    ```
 
 3. Run the development server:
-   ```
+
+   ```bash
    npm run dev
    ```
 
@@ -88,13 +98,13 @@ Once the backend is running, you can access the API documentation at `http://loc
 
 ## 🧪 Key Components
 
-### Backend
+### Backend Services
 
 - `llm_service.py`: Handles communication with the OpenRouter API
 - `chat.py`: Contains API routes for conversation and message handling
 - `schemas.py`: Defines Pydantic models for data validation
 
-### Frontend
+### Frontend Components
 
 - `ChatWindow.tsx`: Main component for the chat interface
 - `Workspace.tsx`: Component for managing workspaces and documents
