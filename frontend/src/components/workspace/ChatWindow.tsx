@@ -8,7 +8,7 @@ import TypingIndicator from './TypingIndicator';
 import ChatInput from './ChatInput';
 import WelcomeScreen from './WelcomeScreen';
 import { useWorkspaces } from '@/hooks/useWorkspaces';
-import LoadingSpinner from '@/components/common/LoadingSpinner'; // Assuming you have this component
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 interface Message {
   id: number;
@@ -17,7 +17,11 @@ interface Message {
   timestamp: string;
 }
 
-const ChatWindow: React.FC = () => {
+interface ChatWindowProps {
+  workspaceId: number | null;  // Adicione esta linha
+}
+
+const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {  // Use o workspaceId aqui
   const [messages, setMessages] = useState<Message[]>([]);
   const [isAiTyping, setIsAiTyping] = useState(false);
   const { toast } = useToast();
@@ -28,16 +32,16 @@ const ChatWindow: React.FC = () => {
   const { workspaces, selectedWorkspaceId, setSelectedWorkspaceId, isLoading, error } = useWorkspaces();
 
   useEffect(() => {
-    if (selectedWorkspaceId) {
+    if (workspaceId) {
       fetchConversationAndMessages();
     }
-  }, [selectedWorkspaceId]);
+  }, [workspaceId]);
 
   const fetchConversationAndMessages = async () => {
-    if (!selectedWorkspaceId) return;
+    if (!workspaceId) return;
 
     try {
-      const conversationResponse = await api.get(`/workspaces/${selectedWorkspaceId}/conversation`);
+      const conversationResponse = await api.get(`/workspaces/${workspaceId}/conversation`);
       const messagesResponse = await api.get(`/conversations/${conversationResponse.data.id}/messages`);
       setMessages(messagesResponse.data);
     } catch (error: any) {
@@ -51,14 +55,14 @@ const ChatWindow: React.FC = () => {
   };
 
   const sendMessage = async (inputMessage: string) => {
-    if (!inputMessage.trim() || !selectedWorkspaceId) return;
+    if (!inputMessage.trim() || !workspaceId) return;
 
     const userMessage = { id: Date.now(), content: inputMessage, sender: 'user' as const, timestamp: new Date().toISOString() };
     setMessages(prevMessages => [...prevMessages, userMessage]);
     setIsAiTyping(true);
 
     try {
-      const response = await api.post(`/workspaces/${selectedWorkspaceId}/messages`, {
+      const response = await api.post(`/workspaces/${workspaceId}/messages`, {
         content: inputMessage,
         sender: 'user',
       });
@@ -77,7 +81,6 @@ const ChatWindow: React.FC = () => {
   };
 
   const handleCreateWorkspace = () => {
-    // Implement the logic to create a new workspace
     console.log("Create new workspace");
   };
 
@@ -111,12 +114,19 @@ const ChatWindow: React.FC = () => {
         workspaces={workspaces}
         selectedWorkspaceId={selectedWorkspaceId}
         setSelectedWorkspaceId={setSelectedWorkspaceId}
+        workspaceName={selectedWorkspaceId ? workspaces.find(ws => ws.id === selectedWorkspaceId)?.name || 'Workspace' : 'Workspace'} // Ajuste para pegar o nome do workspace selecionado
+        workspaceId={selectedWorkspaceId ? selectedWorkspaceId.toString() : ''} // Passa o ID do workspace selecionado
+        isSidebarOpen={false} // Defina como true ou false conforme necessário
+        setIsSidebarOpen={() => {}} // Defina a função de set para abrir/fechar a sidebar
       />
+
       <MessageList 
         messages={messages} 
         isDarkMode={isDarkMode} 
         chatColor={chatColor} 
+        isAiTyping={isAiTyping} // Certifique-se de passar esta prop
       />
+
       {isAiTyping && <TypingIndicator isDarkMode={isDarkMode} />}
       <ChatInput 
         onSendMessage={sendMessage} 

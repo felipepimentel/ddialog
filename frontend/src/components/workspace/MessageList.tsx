@@ -16,8 +16,9 @@ interface MessageListProps {
   messages: Message[];
   isDarkMode: boolean;
   chatColor: string;
-  isAiTyping: boolean;
+  isAiTyping: boolean; // Esta linha deve estar presente
 }
+
 
 const MessageList: React.FC<MessageListProps> = ({ messages, isDarkMode, chatColor, isAiTyping }) => {
   return (

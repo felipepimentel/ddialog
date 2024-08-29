@@ -16,10 +16,16 @@ interface ChatHeaderProps {
   setFontSize: (value: number) => void;
   isSidebarOpen: boolean;
   setIsSidebarOpen: (value: boolean) => void;
+  chatColor: string;
+  setChatColor: (value: string) => void;
+  workspaces: any[];
+  selectedWorkspaceId: number | null;
+  setSelectedWorkspaceId: (id: number | null) => void; // Ajuste para aceitar number | null
 }
 
+
 const ChatHeader: React.FC<ChatHeaderProps> = ({
-  workspaceName = "Workspace", // Valor padrão
+  workspaceName = "Workspace",
   workspaceId,
   isDarkMode,
   setIsDarkMode,
@@ -27,6 +33,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   setFontSize,
   isSidebarOpen,
   setIsSidebarOpen,
+  chatColor,  // Adicione esta linha
+  setChatColor,  // Adicione esta linha, se aplicável
 }) => {
   return (
     <div className={cn(
