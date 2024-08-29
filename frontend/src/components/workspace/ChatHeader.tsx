@@ -19,7 +19,7 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
-  workspaceName,
+  workspaceName = "Workspace", // Valor padrão
   workspaceId,
   isDarkMode,
   setIsDarkMode,
