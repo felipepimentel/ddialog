@@ -154,7 +154,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
       </ScrollArea>
       <div className="p-4 border-t border-gray-700">
         <div className="flex space-x-2 items-end bg-gray-800 p-2 rounded-lg">
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white transition-colors">
+          <Button variant="ghost" className="text-gray-400 hover:text-white transition-colors">
             <Paperclip className="h-5 w-5" />
           </Button>
           <Textarea
@@ -169,10 +169,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {
             className="flex-grow bg-transparent border-none focus:ring-0 text-white placeholder-gray-400 resize-none min-h-[40px] max-h-[200px] overflow-y-auto"
             rows={1}
           />
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white transition-colors">
+          <Button variant="ghost" className="text-gray-400 hover:text-white transition-colors">
             <Mic className="h-5 w-5" />
           </Button>
-          <Button onClick={sendMessage} variant="primary" size="icon" className="bg-indigo-600 hover:bg-indigo-700 transition-colors">
+          <Button onClick={sendMessage} variant="default" className="bg-indigo-600 hover:bg-indigo-700 transition-colors">
             <Send className="h-5 w-5" />
           </Button>
         </div>
