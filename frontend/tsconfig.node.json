@@ -2,8 +2,8 @@
   "compilerOptions": {
     "composite": true,
     "module": "esnext",
-    "moduleResolution": "node",
-    "types": ["react"]
+    "moduleResolution": "bundler",  // Alinhado com Vite
+    "types": ["node", "react"]
   },
   "include": ["vite.config.ts"]
 }

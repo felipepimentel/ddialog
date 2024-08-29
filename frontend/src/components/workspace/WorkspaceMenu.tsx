@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Workspace } from '@/types/workspace';
 import api from '@/services/api';
 import CreateWorkspaceModal from '@/components/workspace/CreateWorkspaceModal';
 import { PlusCircle, Settings, LogOut, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
+
+export interface Workspace {
+  id: number;
+  name: string;
+  description?: string;
+}
 
 interface WorkspaceMenuProps {
   onSelectWorkspace: (workspaceId: number) => void;
   selectedWorkspace: number | null;
 }
+
 
 const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, selectedWorkspace }) => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -73,7 +79,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
         <div className="p-2 space-y-2">
           {workspaces.map((workspace) => (
             <TooltipProvider key={workspace.id}>
-              <Tooltip content={workspace.name}>
+              <Tooltip content={workspace.name} className="z-50">
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => onSelectWorkspace(workspace.id)}
@@ -90,7 +96,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
       </ScrollArea>
       <div className="p-2 space-y-2">
         <TooltipProvider>
-          <Tooltip content="Create New Workspace">
+          <Tooltip content="Create New Workspace" className="z-50">
             <TooltipTrigger asChild>
               <Button
                 onClick={() => setIsCreateModalOpen(true)}
@@ -103,7 +109,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip content="Settings">
+          <Tooltip content="Settings" className="z-50">
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
@@ -115,7 +121,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
           </Tooltip>
         </TooltipProvider>
         <TooltipProvider>
-          <Tooltip content="Log Out">
+          <Tooltip content="Log Out" className="z-50">
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
