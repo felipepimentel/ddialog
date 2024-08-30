@@ -171,3 +171,5 @@ __pycache__/
 backend/src/alembic/versions/*.py
 
 vite.config.js
+
+.cursorrules
