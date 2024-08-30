@@ -46,7 +46,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isDarkMode, chatCo
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
-      console.log('Sending message:', inputMessage); // Add this line
       onSendMessage(inputMessage);
       setInputMessage('');
     }
@@ -91,7 +90,10 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isDarkMode, chatCo
                 onClick={handleSendMessage}
                 variant="default"
                 size="icon"
-                className="transition-all duration-200 hover:scale-105"
+                className={cn(
+                  "transition-all duration-200 hover:scale-105",
+                  isDarkMode ? "text-white" : "text-black"
+                )}
                 style={{ backgroundColor: chatColor }}
               >
                 <Send className="w-5 h-5" />

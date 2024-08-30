@@ -4,7 +4,9 @@ import { cn } from "@/lib/utils";
 import { ChatBubbleProps } from './ChatTypes';
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({ content, sender, timestamp, isDarkMode, chatColor }) => {
-  const formattedTime = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const date = new Date(timestamp);
+  const formattedDate = date.toLocaleDateString([], { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
     <div
@@ -24,7 +26,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ content, sender, timestamp, isD
             <Bot className="w-4 h-4 mr-2" />
           )}
           <small className={cn("text-xs", isDarkMode ? "text-gray-300" : "text-gray-500")}>
-            {formattedTime !== "Invalid Date" ? formattedTime : "Invalid Date"}
+            {formattedDate} {formattedTime}
           </small>
         </div>
       </div>
