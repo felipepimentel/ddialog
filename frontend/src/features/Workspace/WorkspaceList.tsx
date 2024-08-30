@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/services/api';
 
-interface Workspace {
-  id: number;
-  name: string;
-  description: string;
-}
 
 interface WorkspaceListProps {
   onSelectWorkspace: (workspaceId: number) => void;
