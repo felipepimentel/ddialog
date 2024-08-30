@@ -17,8 +17,8 @@ app = FastAPI()
 # Configure CORS - more permissive
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Specify the frontend origin
-    allow_credentials=False,  # Change this to False
+    allow_origins=["http://localhost:5173"],  # Ajuste se necessário
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -44,7 +44,7 @@ except Exception as e:
 
 # Include routers
 app.include_router(workspaces.router, prefix="/api/workspaces", tags=["workspaces"])
-app.include_router(documents.router, prefix="/api/documents", tags=["documents"])  # Fixed the prefix
+app.include_router(documents.router, prefix="/api/documents", tags=["documents"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 
 # Logging Middleware
@@ -74,3 +74,11 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.get("/")
 async def root():
     return {"message": "Welcome to DDialog API"}
+
+# Log requests
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"Received request: {request.method} {request.url}")
+    response = await call_next(request)
+    logger.info(f"Returning response: {response.status_code}")
+    return response

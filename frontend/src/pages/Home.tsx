@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import WorkspaceMenu from '@/components/workspace/WorkspaceMenu';
 import ChatWindow from '@/components/workspace/ChatWindow';
+import WelcomeScreen from '@/components/workspace/WelcomeScreen';
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 
 const Home: React.FC = () => {
-  const [selectedWorkspace, setSelectedWorkspace] = useState<number | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const [selectedWorkspace, setSelectedWorkspace] = useState<number | null>(id ? parseInt(id, 10) : null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      setSelectedWorkspace(parseInt(id, 10));
+    } else {
+      setSelectedWorkspace(null);
+    }
+  }, [id]);
+
+  const handleCreateWorkspace = () => {
+    // Implementar lógica para criar um novo workspace
+    console.log("Create new workspace");
+  };
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
@@ -26,7 +42,11 @@ const Home: React.FC = () => {
             <Menu className="h-6 w-6" />
           </Button>
         </div>
-        <ChatWindow workspaceId={selectedWorkspace} />
+        {selectedWorkspace ? (
+          <ChatWindow workspaceId={selectedWorkspace} />
+        ) : (
+          <WelcomeScreen onCreateWorkspace={handleCreateWorkspace} />
+        )}
       </div>
       <Toaster />
     </div>

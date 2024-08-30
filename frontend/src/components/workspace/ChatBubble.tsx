@@ -11,6 +11,8 @@ interface ChatBubbleProps {
 }
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({ content, sender, timestamp, isDarkMode, chatColor }) => {
+  const formattedTime = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
   return (
     <div
       className={cn(
@@ -29,7 +31,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ content, sender, timestamp, isD
             <Bot className="h-4 w-4 mr-2" />
           )}
           <small className={cn("text-xs", isDarkMode ? "text-gray-300" : "text-gray-500")}>
-            {new Date(timestamp).toLocaleTimeString()}
+            {formattedTime !== "Invalid Date" ? formattedTime : "Invalid Date"}
           </small>
         </div>
       </div>

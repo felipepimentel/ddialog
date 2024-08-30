@@ -14,7 +14,7 @@ interface Message {
   id: number;
   content: string;
   sender: 'user' | 'ai';
-  timestamp: string;
+  created_at: string;
 }
 
 interface ChatWindowProps {
@@ -55,26 +55,35 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {  // Use o w
   };
 
   const sendMessage = async (inputMessage: string) => {
-    if (!inputMessage.trim() || !workspaceId) return;
+    if (!inputMessage.trim() || !workspaceId) {
+      console.log('Message or workspaceId is empty, aborting send');
+      return;
+    }
 
-    const userMessage = { id: Date.now(), content: inputMessage, sender: 'user' as const, timestamp: new Date().toISOString() };
+    const userMessage = { id: Date.now(), content: inputMessage, sender: 'user' as const, created_at: new Date().toISOString() };
     setMessages(prevMessages => [...prevMessages, userMessage]);
     setIsAiTyping(true);
 
     try {
+      console.log('Attempting to send message to API:', inputMessage);
+      console.log('Current workspaceId:', workspaceId);
+      
       const response = await api.post(`/workspaces/${workspaceId}/messages`, {
         content: inputMessage,
         sender: 'user',
       });
 
+      console.log('API Response:', response.data);
+
       setIsAiTyping(false);
       setMessages(prevMessages => [...prevMessages, response.data]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message:', error);
+      console.error('Error details:', error.response?.data);
       setIsAiTyping(false);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: error.message || "Failed to send message. Please try again.",
         variant: "destructive",
       });
     }

@@ -51,6 +51,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isDarkMode, chatCo
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
+      console.log('Sending message:', inputMessage); // Add this line
       onSendMessage(inputMessage);
       setInputMessage('');
     }
@@ -89,16 +90,6 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isDarkMode, chatCo
             )}
             rows={1}
           />
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Mic className="h-5 w-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Voice input</p>
-            </TooltipContent>
-          </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button

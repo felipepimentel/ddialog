@@ -12,6 +12,7 @@ const App: React.FC = () => {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/workspace/:id" element={<Home />} />
           </Routes>
         </Layout>
       </Router>

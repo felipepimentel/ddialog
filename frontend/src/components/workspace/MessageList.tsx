@@ -9,7 +9,7 @@ interface Message {
   id: number;
   content: string;
   sender: 'user' | 'ai';
-  timestamp: string;
+  created_at: string;
   attachments?: { type: 'image' | 'file'; url: string; name: string }[];
 }
 

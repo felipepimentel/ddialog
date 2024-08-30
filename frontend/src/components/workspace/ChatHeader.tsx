@@ -42,14 +42,14 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
       isDarkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-white/50"
     )}>
       <div className="flex items-center space-x-2">
-        <Button
+        {/* <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className={cn(isDarkMode ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-gray-900")}
         >
           {isSidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-        </Button>
+        </Button> */}
         <h2 className="text-xl font-semibold flex items-center">
           <Avatar className="h-8 w-8 mr-2">
             <AvatarImage src={`https://avatar.vercel.sh/${workspaceId}.png`} alt={workspaceName} />
