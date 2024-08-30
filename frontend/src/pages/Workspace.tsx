@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ChatWindow from '../components/workspace/ChatWindow';
-import DocumentList from '../components/workspace/DocumentList';
-import DocumentUpload from '../components/workspace/DocumentUpload';
+import ChatWindow from '../features/Workspace/ChatWindow';
+import DocumentList from '../features/Workspace/DocumentList';
+import DocumentUpload from '../features/Workspace/DocumentUpload';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import api from '../services/api';
 

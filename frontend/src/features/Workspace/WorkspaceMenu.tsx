@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '@/services/api';
-import CreateWorkspaceModal from '@/components/workspace/CreateWorkspaceModal';
+import CreateWorkspaceModal from '@/features/Workspace/CreateWorkspaceModal';
 import { PlusCircle, Settings, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
-import Logo from '@/components/Logo';
+import Logo from '@/components/common/Logo';
 
 export interface Workspace {
   id: number;
