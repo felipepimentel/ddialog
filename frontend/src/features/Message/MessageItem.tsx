@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
-import ChatBubble from './ChatBubble';
+import ChatBubble from '@/features/Chat/ChatBubble';
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 

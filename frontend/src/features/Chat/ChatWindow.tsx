@@ -3,12 +3,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import api from '@/services/api';
 import ChatHeader from './ChatHeader';
-import MessageList from './MessageList';
+import MessageList from '@/features/Message/MessageList';
 import TypingIndicator from './TypingIndicator';
 import ChatInput from './ChatInput';
-import WelcomeScreen from './WelcomeScreen';
+import WelcomeScreen from '@/features/Welcome/WelcomeScreen';
 import { useWorkspaces } from '@/hooks/useWorkspaces';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingSpinner from '@/layouts/LoadingSpinner';
 
 interface Message {
   id: number;

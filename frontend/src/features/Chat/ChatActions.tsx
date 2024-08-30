@@ -1,7 +1,7 @@
 import React from 'react';
 import { Zap, Settings } from "lucide-react";
 import IconButton from '@/components/ui/IconButton';
-import ChatSettings from './ChatSettings';
+import ChatSettings from '@/features/Workspace/ChatSettings';
 
 interface ChatActionsProps {
   isDarkMode: boolean;

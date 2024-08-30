@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ThemeProvider } from '@/components/common/theme-provider';
-import Layout from '@/components/common/Layout';
-import Home from '@/pages/Home';
+import { ThemeProvider } from '@/layouts/theme-provider';
+import Layout from '@/layouts/Layout';
+import Home from '@/features/Home/Home';
 import { Toaster } from '@/components/ui/toaster';
 
 const App: React.FC = () => {

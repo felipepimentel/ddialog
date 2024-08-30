@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ChatWindow from '../features/Workspace/ChatWindow';
-import DocumentList from '../features/Workspace/DocumentList';
-import DocumentUpload from '../features/Workspace/DocumentUpload';
-import LoadingSpinner from '../components/common/LoadingSpinner';
-import api from '../services/api';
+import ChatWindow from '@/features/Chat/ChatWindow';
+import DocumentList from '@/features/Document/DocumentList';
+import DocumentUpload from '@/features/Document/DocumentUpload';
+import LoadingSpinner from '@/layouts/LoadingSpinner';
+import api from '@/services/api';
 
 const Workspace: React.FC = () => {
   const { id } = useParams<{ id: string }>();
