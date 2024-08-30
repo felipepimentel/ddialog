@@ -5,22 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlusCircle, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Workspace {
-  id: string;
-  name: string;
-  color: string;
-}
-
-interface SidebarProps {
-  workspaces: Workspace[];
-  selectedWorkspaceId: string;
-  onSelectWorkspace: (id: string) => void;
-  onCreateWorkspace: () => void;
-  onEditWorkspace: (workspace: Workspace) => void;
-  onDeleteWorkspace: (id: string) => void;
-  isDarkMode: boolean;
-}
+import { SidebarProps } from './WorkspaceTypes';
 
 const Sidebar: React.FC<SidebarProps> = ({
   workspaces,

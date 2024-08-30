@@ -2,6 +2,7 @@ export interface Workspace {
     id: number;
     name: string;
     description?: string;
+    color: string;
 }
 
 export interface WorkspaceMenuProps {
@@ -29,3 +30,15 @@ export interface CreateWorkspaceModalProps {
     onClose: () => void;
     onCreateWorkspace: (name: string, description: string) => void;
 }
+
+
+export interface SidebarProps {
+    workspaces: Workspace[];
+    selectedWorkspaceId: number;
+    onSelectWorkspace: (id: number) => void;
+    onCreateWorkspace: () => void;
+    onEditWorkspace: (workspace: Workspace) => void;
+    onDeleteWorkspace: (id: number) => void;
+    isDarkMode: boolean;
+}
+
