@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import api from '@/services/api';
-
-interface CreateWorkspaceFormProps {
-  onWorkspaceCreated?: () => void;
-}
+import { CreateWorkspaceFormProps } from './WorkspaceTypes';
 
 const CreateWorkspaceForm: React.FC<CreateWorkspaceFormProps> = ({ onWorkspaceCreated }) => {
   const [name, setName] = useState('');
@@ -25,14 +22,14 @@ const CreateWorkspaceForm: React.FC<CreateWorkspaceFormProps> = ({ onWorkspaceCr
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Create New Workspace</h2>
+      <h2 className="mb-4 text-2xl font-semibold">Create New Workspace</h2>
       <div className="space-y-4">
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter workspace name"
-          className="input w-full"
+          className="w-full input"
           required
         />
         <input
@@ -40,9 +37,9 @@ const CreateWorkspaceForm: React.FC<CreateWorkspaceFormProps> = ({ onWorkspaceCr
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter workspace description"
-          className="input w-full"
+          className="w-full input"
         />
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="w-full btn btn-primary">
           Create Workspace
         </button>
       </div>

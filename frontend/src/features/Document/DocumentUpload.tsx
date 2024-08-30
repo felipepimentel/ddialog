@@ -1,11 +1,6 @@
 import React from 'react';
 import api from '@/services/api';
-
-interface DocumentUploadProps {
-  workspaceId: string;
-  onUploadSuccess: () => void;
-  children: React.ReactNode;
-}
+import { DocumentUploadProps } from '@/features/Document/DocumentTypes';
 
 const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUploadSuccess, children }) => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +21,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ workspaceId, onUploadSu
   };
 
   return (
-    <label className="p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors duration-200">
+    <label className="p-2 transition-colors duration-200 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
       {children}
       <input
         type="file"

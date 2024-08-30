@@ -26,3 +26,5 @@ export interface MessageItemProps {
     isDarkMode: boolean;
     chatColor: string;
 }
+
+  

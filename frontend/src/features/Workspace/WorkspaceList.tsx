@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '@/services/api';
+import { Workspace, WorkspaceListProps } from './WorkspaceTypes';
 
-
-interface WorkspaceListProps {
-  onSelectWorkspace: (workspaceId: number) => void;
-  selectedWorkspace: number | null;
-}
 
 const WorkspaceList: React.FC<WorkspaceListProps> = ({ onSelectWorkspace, selectedWorkspace }) => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);

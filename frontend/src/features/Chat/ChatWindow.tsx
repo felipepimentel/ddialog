@@ -9,17 +9,8 @@ import ChatInput from './ChatInput';
 import WelcomeScreen from '@/features/Welcome/WelcomeScreen';
 import { useWorkspaces } from '@/hooks/useWorkspaces';
 import LoadingSpinner from '@/layouts/LoadingSpinner';
-
-interface Message {
-  id: number;
-  content: string;
-  sender: 'user' | 'ai';
-  created_at: string;
-}
-
-interface ChatWindowProps {
-  workspaceId: number | null;  // Adicione esta linha
-}
+import { ChatWindowProps } from './ChatTypes';
+import { Message } from '@/features/Message/MessageTypes';
 
 const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {  // Use o workspaceId aqui
   const [messages, setMessages] = useState<Message[]>([]);

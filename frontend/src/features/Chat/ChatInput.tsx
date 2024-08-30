@@ -5,32 +5,27 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ChevronDown, Paperclip, ImageIcon, Smile, Mic, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface ChatInputProps {
-  onSendMessage: (message: string) => void;
-  isDarkMode: boolean;
-  chatColor: string;
-}
+import { ChatInputProps } from './ChatTypes';
 
 const ChatInputActions: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
-          <ChevronDown className="h-5 w-5" />
+          <ChevronDown className="w-5 h-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuItem>
-          <Paperclip className="mr-2 h-4 w-4" />
+          <Paperclip className="w-4 h-4 mr-2" />
           <span>Attach file</span>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <ImageIcon className="mr-2 h-4 w-4" />
+          <ImageIcon className="w-4 h-4 mr-2" />
           <span>Upload image</span>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Smile className="mr-2 h-4 w-4" />
+          <Smile className="w-4 h-4 mr-2" />
           <span>Choose emoji</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -99,7 +94,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isDarkMode, chatCo
                 className="transition-all duration-200 hover:scale-105"
                 style={{ backgroundColor: chatColor }}
               >
-                <Send className="h-5 w-5" />
+                <Send className="w-5 h-5" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>

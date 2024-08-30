@@ -8,17 +8,8 @@ import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/comp
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import Logo from '@/layouts/Logo';
+import { Workspace, WorkspaceMenuProps } from './WorkspaceTypes';
 
-export interface Workspace {
-  id: number;
-  name: string;
-  description?: string;
-}
-
-interface WorkspaceMenuProps {
-  onSelectWorkspace: (workspaceId: number) => void;
-  selectedWorkspace: number | null;
-}
 
 const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, selectedWorkspace }) => {
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
@@ -72,7 +63,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
   };
 
   return (
-    <div className="w-20 h-full flex flex-col bg-gray-800 border-r border-gray-700">
+    <div className="flex flex-col w-20 h-full bg-gray-800 border-r border-gray-700">
       <Logo /> 
       <ScrollArea className="flex-1 w-full">
         <div className="p-2 space-y-2">
@@ -105,9 +96,9 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({ onSelectWorkspace, select
               <Button
                 onClick={() => setIsCreateModalOpen(true)}
                 variant="outline"
-                className="w-14 h-14 rounded-full hover:bg-blue-500 hover:text-white transition-colors"
+                className="transition-colors rounded-full w-14 h-14 hover:bg-blue-500 hover:text-white"
               >
-                <PlusCircle className="h-6 w-6" />
+                <PlusCircle className="w-6 h-6" />
               </Button>
             </TooltipTrigger>
             <TooltipContent className="z-50">Create New Workspace</TooltipContent>

@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
+import { CreateWorkspaceModalProps } from './WorkspaceTypes';
 
-interface CreateWorkspaceModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreateWorkspace: (name: string, description: string) => void;
-}
 
 const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({ isOpen, onClose, onCreateWorkspace }) => {
   const [name, setName] = useState('');
@@ -20,16 +16,16 @@ const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({ isOpen, onC
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg w-96">
-        <h2 className="text-2xl font-semibold mb-4">Create New Workspace</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="p-6 bg-white rounded-lg dark:bg-gray-800 w-96">
+        <h2 className="mb-4 text-2xl font-semibold">Create New Workspace</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter workspace name"
-            className="input w-full"
+            className="w-full input"
             required
           />
           <input
@@ -37,7 +33,7 @@ const CreateWorkspaceModal: React.FC<CreateWorkspaceModalProps> = ({ isOpen, onC
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter workspace description"
-            className="input w-full"
+            className="w-full input"
           />
           <div className="flex justify-end space-x-2">
             <button type="button" onClick={onClose} className="btn btn-secondary">

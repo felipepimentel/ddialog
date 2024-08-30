@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Info, MoreVertical } from 'lucide-react';
-
-interface WorkspaceHeaderProps {
-  workspaceName: string;
-}
+import { WorkspaceHeaderProps } from './WorkspaceTypes';
 
 const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ workspaceName }) => {
   return (
@@ -12,10 +9,10 @@ const WorkspaceHeader: React.FC<WorkspaceHeaderProps> = ({ workspaceName }) => {
       <h2 className="text-xl font-semibold">{workspaceName}</h2>
       <div className="flex space-x-2">
         <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-          <Info className="h-5 w-5" />
+          <Info className="w-5 h-5" />
         </Button>
         <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-          <MoreVertical className="h-5 w-5" />
+          <MoreVertical className="w-5 h-5" />
         </Button>
       </div>
     </div>

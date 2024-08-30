@@ -1,14 +1,7 @@
 import React from 'react';
 import { User, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface ChatBubbleProps {
-  content: string;
-  sender: 'user' | 'ai';
-  timestamp: string;
-  isDarkMode: boolean;
-  chatColor: string;
-}
+import { ChatBubbleProps } from './ChatTypes';
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({ content, sender, timestamp, isDarkMode, chatColor }) => {
   const formattedTime = new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -26,9 +19,9 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({ content, sender, timestamp, isD
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center">
           {sender === 'user' ? (
-            <User className="h-4 w-4 mr-2" />
+            <User className="w-4 h-4 mr-2" />
           ) : (
-            <Bot className="h-4 w-4 mr-2" />
+            <Bot className="w-4 h-4 mr-2" />
           )}
           <small className={cn("text-xs", isDarkMode ? "text-gray-300" : "text-gray-500")}>
             {formattedTime !== "Invalid Date" ? formattedTime : "Invalid Date"}
