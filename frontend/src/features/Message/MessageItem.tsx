@@ -1,3 +1,4 @@
+// src/features/Chat/components/MessageItem.tsx
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
 import { Copy, Check } from "lucide-react";
@@ -6,17 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import ChatBubble from '@/features/Chat/ChatBubble';
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
-interface MessageItemProps {
-  message: {
-    id: number;
-    content: string;
-    sender: 'user' | 'ai';
-    timestamp: string;
-  };
-  isDarkMode: boolean;
-  chatColor: string;
-}
+import { MessageItemProps } from '@/features/Message/MessageTypes';
 
 const MessageItem: React.FC<MessageItemProps> = ({ message, isDarkMode, chatColor }) => {
   const [copiedMessageId, setCopiedMessageId] = useState<number | null>(null);
@@ -46,7 +37,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isDarkMode, chatColo
       <ChatBubble
         content={message.content}
         sender={message.sender}
-        timestamp={message.timestamp}
+        timestamp={message.created_at}
         isDarkMode={isDarkMode}
         chatColor={chatColor}
       />
@@ -63,7 +54,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isDarkMode, chatColo
                   isDarkMode ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-200/50"
                 )}
               >
-                {copiedMessageId === message.id ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                {copiedMessageId === message.id ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </Button>
             </TooltipTrigger>
             <TooltipContent>

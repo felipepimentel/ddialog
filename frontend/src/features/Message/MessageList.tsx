@@ -3,22 +3,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MessageItem from './MessageItem';
-import { Bot, Loader2 } from "lucide-react"; // Substitua Robot por Bot
-
-interface Message {
-  id: number;
-  content: string;
-  sender: 'user' | 'ai';
-  created_at: string;
-  attachments?: { type: 'image' | 'file'; url: string; name: string }[];
-}
-
-interface MessageListProps {
-  messages: Message[];
-  isDarkMode: boolean;
-  chatColor: string;
-  isAiTyping: boolean;
-}
+import { Bot, Loader2 } from "lucide-react"; 
+import { MessageListProps } from '@/features/Message/MessageTypes';
 
 const MessageList: React.FC<MessageListProps> = ({ messages, isDarkMode, chatColor, isAiTyping }) => {
   return (
@@ -40,9 +26,9 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isDarkMode, chatCol
           exit={{ opacity: 0, y: -20 }}
           className={cn("flex items-center", isDarkMode ? "text-gray-400" : "text-gray-600")}
         >
-          <Bot className="h-4 w-4 mr-2" /> {/* Usando o ícone Bot */}
+          <Bot className="w-4 h-4 mr-2" />
           <span>AI is thinking</span>
-          <Loader2 className="h-4 w-4 ml-2 animate-spin" /> {/* Usando o ícone Loader2 */}
+          <Loader2 className="w-4 h-4 ml-2 animate-spin" />
         </motion.div>
       )}
     </ScrollArea>
