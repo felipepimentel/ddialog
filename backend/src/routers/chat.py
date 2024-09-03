@@ -62,3 +62,42 @@ async def create_message(workspace_id: int, message: schemas.MessageCreate, db: 
         return ai_message
 
     return db_message
+
+@router.post("/workspaces/{workspace_id}/threads/{thread_id}/messages", response_model=schemas.Message)
+async def create_message(
+    workspace_id: int,
+    thread_id: int,
+    message: schemas.MessageCreate,
+    db: Session = Depends(get_db)
+):
+    # Verificar se o workspace e a thread existem
+    workspace = get_workspace_or_404(workspace_id, db)
+    thread = get_thread_or_404(thread_id, db)
+
+    # Salvar a mensagem do usuário
+    user_message = models.Message(
+        content=message.content,
+        sender="user",
+        thread_id=thread_id
+    )
+    db.add(user_message)
+    db.commit()
+    db.refresh(user_message)
+
+    # Realizar o processo de RAG
+    relevant_docs = rag_service.retrieve_relevant_documents(message.content, workspace_id)
+    
+    # Gerar resposta da IA
+    ai_response = await llm_service.generate_response(message.content, relevant_docs)
+
+    # Salvar a resposta da IA
+    ai_message = models.Message(
+        content=ai_response,
+        sender="ai",
+        thread_id=thread_id
+    )
+    db.add(ai_message)
+    db.commit()
+    db.refresh(ai_message)
+
+    return ai_message

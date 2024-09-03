@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '@/services/api';
-import CreateWorkspaceModal from '@/features/Workspace/CreateWorkspaceModal';
+import CreateWorkspaceModal from '@/components/Workspace/CreateWorkspaceModal';
 import { PlusCircle, Settings, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';

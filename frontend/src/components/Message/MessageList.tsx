@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import MessageItem from './MessageItem';
 import { Bot, Loader2 } from "lucide-react"; 
-import { MessageListProps } from '@/features/Message/MessageTypes';
+import { MessageListProps } from '@/components/Message/MessageTypes';
 
 const MessageList: React.FC<MessageListProps> = ({ messages, isDarkMode, chatColor, isAiTyping }) => {
   return (

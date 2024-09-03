@@ -3,14 +3,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import api from '@/services/api';
 import ChatHeader from './ChatHeader';
-import MessageList from '@/features/Message/MessageList';
+import MessageList from '@/components/Message/MessageList';
 import TypingIndicator from './TypingIndicator';
 import ChatInput from './ChatInput';
-import WelcomeScreen from '@/features/Welcome/WelcomeScreen';
+import WelcomeScreen from '@/components/Welcome/WelcomeScreen';
 import { useWorkspaces } from '@/hooks/useWorkspaces';
 import LoadingSpinner from '@/layouts/LoadingSpinner';
 import { ChatWindowProps } from './ChatTypes';
-import { Message } from '@/features/Message/MessageTypes';
+import { Message } from '@/components/Message/MessageTypes';
 
 const ChatWindow: React.FC<ChatWindowProps> = ({ workspaceId }) => {  // Use o workspaceId aqui
   const [messages, setMessages] = useState<Message[]>([]);

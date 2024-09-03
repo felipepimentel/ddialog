@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ChatWindow from '@/features/Chat/ChatWindow';
+import ChatWindow from '@/components/Chat/ChatWindow';
 import DocumentList from '@/features/Document/DocumentList';
 import DocumentUpload from '@/features/Document/DocumentUpload';
 import LoadingSpinner from '@/layouts/LoadingSpinner';

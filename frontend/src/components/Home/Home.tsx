@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import WorkspaceMenu from '@/features/Workspace/WorkspaceMenu';
-import ChatWindow from '@/features/Chat/ChatWindow';
-import WelcomeScreen from '@/features/Welcome/WelcomeScreen';
+import WorkspaceMenu from '@/components/Workspace/WorkspaceMenu';
+import ChatWindow from '@/components/Chat/ChatWindow';
+import WelcomeScreen from '@/components/Welcome/WelcomeScreen';
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
